@@ -15,27 +15,7 @@ function main() {
   printDaysOfWeek();
 
   for (let day = 1; day <= LAST_DAY; day++) {
-    let dayOfweek = calculateNumberOfTheDayOfWeek(YEAR, MONTH, day);
-
-    switch (dayOfweek) {
-      case 0:
-        process.stdout.write(`${day}`.padStart(2));
-        break;
-      case 6:
-        if (day == 1) {
-          process.stdout.write(formatTheFirstDay(dayOfweek, day) + `\n`);
-        } else {
-          process.stdout.write(formatDay(day) + `\n`);
-        }
-        break;
-      default:
-        if (day == 1) {
-          process.stdout.write(formatTheFirstDay(dayOfweek, day));
-        } else {
-          process.stdout.write(formatDay(day));
-        }
-        break;
-    }
+    printFormattedDay(YEAR, MONTH, day);
   }
 }
 
@@ -47,6 +27,30 @@ function printDaysOfWeek() {
   process.stdout.write("日 月 火 水 木 金 土\n");
 }
 
+function printFormattedDay(year, month, day) {
+  let dayOfWeek = calculateNumberOfTheDayOfWeek(year, month, day);
+
+  switch (dayOfWeek) {
+    case 0:
+      process.stdout.write(formatDay(day));
+      break;
+    case 6:
+      if (day == 1) {
+        process.stdout.write(formatTheFirstDay(dayOfWeek, day) + `\n`);
+      } else {
+        process.stdout.write(" " + formatDay(day) + `\n`);
+      }
+      break;
+    default:
+      if (day == 1) {
+        process.stdout.write(formatTheFirstDay(dayOfWeek, day));
+      } else {
+        process.stdout.write(" " + formatDay(day));
+      }
+      break;
+  }
+}
+
 function calculateNumberOfTheDayOfWeek(year, month, day) {
   return dayjs()
     .year(year)
@@ -55,12 +59,12 @@ function calculateNumberOfTheDayOfWeek(year, month, day) {
     .day();
 }
 
-function formatTheFirstDay(dayOfweek, day) {
-  return "  " + "   ".repeat(dayOfweek - 1) + formatDay(day);
+function formatTheFirstDay(dayOfWeek, day) {
+  return "  " + "   ".repeat(dayOfWeek - 1) + " " + formatDay(day);
 }
 
 function formatDay(day) {
-  return " " + `${day}`.padStart(2);
+  return `${day}`.padStart(2);
 }
 
 main();
