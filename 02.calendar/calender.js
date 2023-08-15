@@ -36,8 +36,8 @@ function printDates() {
   for (let i = 1; i <= LAST_DATE; i++) {
     week.push(DAYJS.date().toString().padStart(2));
 
-    if (current_dayjs.day() === 6 || i === LAST_DATE){
-      process.stdout.write(week.join(' '));
+    if (current_dayjs.day() === 6 || i === LAST_DATE) {
+      process.stdout.write(week.join(" "));
       process.stdout.write(`\n`);
       week.splice(0); // array reset
     }
@@ -48,8 +48,8 @@ function printDates() {
 function fillBlanks(dayJsObject) {
   const blanksCount = dayJsObject.day();
 
-  let blanksArray = new Array(blanksCount).fill('  ');
-  process.stdout.write(blanksArray.join(' ') + ' ');
+  let blanksArray = new Array(blanksCount).fill("  ");
+  process.stdout.write(blanksArray.join(" ") + " ");
 }
 
 main();
