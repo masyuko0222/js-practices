@@ -6,14 +6,14 @@ import dayjs from "dayjs";
 import objectSupport from "dayjs/plugin/objectSupport.js";
 dayjs.extend(objectSupport);
 
-const ARGS = minimist(process.argv);
-const YEAR = ARGS.y ?? dayjs().year();
-const MONTH = ARGS.m ? ARGS.m - 1 : dayjs().month();
+const args = minimist(process.argv);
+const year = args.y ?? dayjs().year();
+const month = args.m ? args.m - 1 : dayjs().month();
 
-let DAYJS = dayjs({ year: YEAR, month: MONTH });
+let dayjsObj = dayjs({ year: year, month: month });
 
 function main() {
-  printMonthYear(DAYJS.month(), DAYJS.year());
+  printMonthYear(dayjsObj.month(), dayjsObj.year());
   printDaysOfWeek();
   printDates();
 }
@@ -27,26 +27,26 @@ function printDaysOfWeek() {
 }
 
 function printDates() {
-  fillBlanks(DAYJS);
+  fillBlanks(dayjsObj);
 
-  const LAST_DATE = DAYJS.daysInMonth();
-  let current_dayjs = DAYJS;
+  const LAST_DATE = dayjsObj.daysInMonth();
+  let currentDayjsObj = dayjsObj;
   let week = [];
 
   for (let i = 1; i <= LAST_DATE; i++) {
-    week.push(current_dayjs.date().toString().padStart(2));
+    week.push(currentDayjsObj.date().toString().padStart(2));
 
-    if (current_dayjs.day() === 6 || i === LAST_DATE) {
+    if (currentDayjsObj.day() === 6 || i === LAST_DATE) {
       process.stdout.write(week.join(" "));
       process.stdout.write(`\n`);
       week.splice(0); // array reset
     }
-    current_dayjs = current_dayjs.add(1, "day");
+    currentDayjsObj = currentDayjsObj.add(1, "day");
   }
 }
 
-function fillBlanks(dayJsObject) {
-  const blanksCount = dayJsObject.day();
+function fillBlanks(dayjsObj) {
+  const blanksCount = dayjsObj.day();
 
   let blanksArray = new Array(blanksCount).fill("  ");
   process.stdout.write(blanksArray.join(" ") + " ");
