@@ -34,7 +34,7 @@ function printDates() {
   let week = [];
 
   for (let i = 1; i <= LAST_DATE; i++) {
-    week.push(DAYJS.date().toString().padStart(2));
+    week.push(current_dayjs.date().toString().padStart(2));
 
     if (current_dayjs.day() === 6 || i === LAST_DATE) {
       process.stdout.write(week.join(" "));
