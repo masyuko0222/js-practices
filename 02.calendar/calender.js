@@ -49,7 +49,12 @@ function fillBlanks(dayjsObj) {
   const blanksCount = dayjsObj.day();
 
   let blanksArray = new Array(blanksCount).fill("  ");
-  process.stdout.write(blanksArray.join(" ") + " ");
+  let blanksFormat = blanksArray.join(" ");
+  if (blanksCount !== 0) {
+    blanksFormat = blanksFormat + " ";
+  }
+
+  process.stdout.write(blanksFormat);
 }
 
 main();
