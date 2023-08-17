@@ -29,14 +29,14 @@ function printDaysOfWeek() {
 function printDates() {
   fillBlanks(dayjsObj);
 
-  const LAST_DATE = dayjsObj.daysInMonth();
+  const last_date = dayjsObj.daysInMonth();
   let currentDayjsObj = dayjsObj;
   let week = [];
 
-  for (let i = 1; i <= LAST_DATE; i++) {
+  for (let i = 1; i <= last_date; i++) {
     week.push(currentDayjsObj.date().toString().padStart(2));
 
-    if (currentDayjsObj.day() === 6 || i === LAST_DATE) {
+    if (currentDayjsObj.day() === 6 || i === last_date) {
       process.stdout.write(week.join(" "));
       process.stdout.write(`\n`);
       week.splice(0); // array reset
