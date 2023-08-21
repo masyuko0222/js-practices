@@ -14,24 +14,24 @@ new Promise((resolve) => {
   );
 })
   .then(() => {
-    return new Promise((resolve) => {
+    return new Promise((_, reject) => {
       db.run(
-        `INSERT INTO books (title) VALUES ($title1), ($title2)`,
+        `INSERT INTO books (no_column) VALUES ($title1), ($title2)`,
         { $title1: "First Books", $title2: "Second Book" },
-        function () {
-          console.log("Inserted records successfully.");
-          console.log(`The last inserted ID is ${this.lastID}`);
-          resolve();
+        (err) => {
+          console.log("Failed inserting");
+          console.log(err.message);
+          reject();
         }
       );
     });
   })
-  .then(() => {
-    return new Promise((resolve) => {
-      db.all(`SELECT * FROM books`, (_, row) => {
-        console.log("Selected all records successfully.");
-        console.log(row);
-        resolve();
+  .catch(() => {
+    return new Promise((_, reject) => {
+      db.all(`SELECT * FROM no_table`, (err) => {
+        console.log("Failed selecting.");
+        console.log(err.message);
+        reject();
       });
     });
   })
