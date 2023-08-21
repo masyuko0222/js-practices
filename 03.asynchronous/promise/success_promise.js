@@ -36,7 +36,9 @@ new Promise((resolve) => {
     });
   })
   .then(() => {
-    db.close(() => {
-      console.log("Closed DB successfully.");
+    return new Promise(() => {
+      db.close(() => {
+        console.log("Closed DB successfully.");
+      });
     });
   });
