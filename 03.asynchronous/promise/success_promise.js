@@ -14,31 +14,23 @@ new Promise((resolve) => {
   );
 })
   .then(() => {
-    return new Promise((resolve) => {
-      db.run(
-        `INSERT INTO books (title) VALUES ($title1), ($title2)`,
-        { $title1: "First Books", $title2: "Second Book" },
-        function () {
-          console.log("Inserted records successfully.");
-          console.log(`The last inserted ID is ${this.lastID}`);
-          resolve();
-        }
-      );
-    });
+    db.run(
+      `INSERT INTO books (title) VALUES ($title1), ($title2)`,
+      { $title1: "First Books", $title2: "Second Book" },
+      function () {
+        console.log("Inserted records successfully.");
+        console.log(`The last inserted ID is ${this.lastID}`);
+      }
+    );
   })
   .then(() => {
-    return new Promise((resolve) => {
-      db.all(`SELECT * FROM books`, (_, row) => {
-        console.log("Selected all records successfully.");
-        console.log(row);
-        resolve();
-      });
+    db.all(`SELECT * FROM books`, (_, row) => {
+      console.log("Selected all records successfully.");
+      console.log(row);
     });
   })
   .finally(() => {
-    return new Promise(() => {
-      db.close(() => {
-        console.log("Closed DB successfully.");
-      });
+    db.close(() => {
+      console.log("Closed DB successfully.");
     });
   });
