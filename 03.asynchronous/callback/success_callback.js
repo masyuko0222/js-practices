@@ -14,9 +14,9 @@ db.run(
       function () {
         console.log("Inserted records successfully.");
         console.log(`Last inserted ID is ${this.lastID}.`);
-        db.all(`SELECT * FROM books`, (_, row) => {
+        db.all(`SELECT * FROM books`, (_, rows) => {
           console.log("Selected all records successfully.");
-          console.log(row);
+          console.log(rows);
           db.close(() => {
             console.log("Closed DB successfully.");
           });
