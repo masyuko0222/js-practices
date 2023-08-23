@@ -13,10 +13,10 @@ db.run(
       { $title1: "First Book", $title2: "Second Book" },
       (err) => {
         console.log("Failed inserting.");
-        console.log(err.message);
+        console.error(err.message);
         db.all("SELECT * FROM no_table", (err) => {
           console.log("Failed selecting");
-          console.log(err.message);
+          console.error(err.message);
           db.close(() => {
             console.log("Closed DB");
           });
