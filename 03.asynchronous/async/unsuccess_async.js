@@ -4,32 +4,10 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-async function asyncMain() {
-  await createTablePromise();
-  console.log("Created books table successfully.");
-
-  try {
-    await insertErrRecords();
-  } catch (error) {
-    console.log("Failed inserting");
-    console.log(error.message);
-  }
-
-  try {
-    await selectErrRecords();
-  } catch (error) {
-    console.log("Failed selecting.");
-    console.log(error.message);
-  }
-
-  await closeDbPromise();
-  console.log("Closed DB successfully.");
-}
-
 const createTablePromise = () => {
   return new Promise((resolve) => {
     db.run(
-      "CREATE TABLE IF NOT EXISTS books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+      "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
       () => {
         resolve();
       }
@@ -37,22 +15,22 @@ const createTablePromise = () => {
   });
 };
 
-const insertErrRecords = () => {
+const insertRecordsRejectPromise = () => {
   return new Promise((_, reject) => {
     db.run(
       "INSERT INTO books (no_column) VALUES ($title1), ($title2)",
-      { $title1: "First book", $title2: "Second Book" },
-      (err) => {
-        reject(err);
+      { $title1: "FirstBook", $title2: "SecondBook" },
+      (error) => {
+        reject(error);
       }
     );
   });
 };
 
-const selectErrRecords = () => {
+const selectAllRecordsRejectPromise = () => {
   return new Promise((_, reject) => {
-    db.all("SELECT * FROM no_table", (err) => {
-      reject(err);
+    db.all("SELECT * FROM no_table", (error) => {
+      reject(error);
     });
   });
 };
@@ -65,4 +43,26 @@ const closeDbPromise = () => {
   });
 };
 
-asyncMain();
+async function main() {
+  await createTablePromise();
+  console.log("Created books table successfully.");
+
+  try {
+    await insertRecordsRejectPromise();
+  } catch (error) {
+    console.log("Error occurred!!!");
+    console.error(error);
+  }
+
+  try {
+    await selectAllRecordsRejectPromise();
+  } catch (error) {
+    console.log("Error occurred!!!");
+    console.error(error);
+  }
+
+  await closeDbPromise();
+  console.log("Closed DB successfully.");
+}
+
+main();
