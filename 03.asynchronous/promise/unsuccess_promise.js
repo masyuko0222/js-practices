@@ -39,6 +39,14 @@ const selectAllRecordsRejectPromise = () => {
   });
 };
 
+const closeDbPromise = () => {
+  return new Promise((resolve) => {
+    db.close(() => {
+      resolve();
+    });
+  });
+};
+
 createTablePromise()
   .then(() => {
     console.log("Created books table successfully.");
@@ -54,7 +62,8 @@ createTablePromise()
     console.error(error.message);
   })
   .finally(() => {
-    db.close(() => {
-      console.log("Closed DB successfully.");
-    });
+    return closeDbPromise();
+  })
+  .then(() => {
+    console.log("Closed DB successfully.");
   });
