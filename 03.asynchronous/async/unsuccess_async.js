@@ -29,7 +29,7 @@ async function asyncMain() {
 const createTablePromise = () => {
   return new Promise((resolve) => {
     db.run(
-      `CREATE TABLE IF NOT EXISTS books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)`,
+      "CREATE TABLE IF NOT EXISTS books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
       () => {
         resolve();
       }
@@ -40,7 +40,7 @@ const createTablePromise = () => {
 const insertErrRecords = () => {
   return new Promise((_, reject) => {
     db.run(
-      `INSERT INTO books (no_column) VALUES ($title1), ($title2)`,
+      "INSERT INTO books (no_column) VALUES ($title1), ($title2)",
       { $title1: "First book", $title2: "Second Book" },
       (err) => {
         reject(err);
@@ -51,7 +51,7 @@ const insertErrRecords = () => {
 
 const selectErrRecords = () => {
   return new Promise((_, reject) => {
-    db.all(`SELECT * FROM no_table`, (err) => {
+    db.all("SELECT * FROM no_table", (err) => {
       reject(err);
     });
   });

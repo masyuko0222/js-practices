@@ -6,7 +6,7 @@ const db = new sqlite3.Database(":memory:");
 
 new Promise((resolve) => {
   db.run(
-    `CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)`,
+    "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     () => {
       console.log("Created books table successfully.");
       resolve();
@@ -15,7 +15,7 @@ new Promise((resolve) => {
 })
   .then(() => {
     db.run(
-      `INSERT INTO books (title) VALUES ($title1), ($title2)`,
+      "INSERT INTO books (title) VALUES ($title1), ($title2)",
       { $title1: "First Books", $title2: "Second Book" },
       function () {
         console.log("Inserted records successfully.");
@@ -24,7 +24,7 @@ new Promise((resolve) => {
     );
   })
   .then(() => {
-    db.all(`SELECT * FROM books`, (_, row) => {
+    db.all("SELECT * FROM books", (_, row) => {
       console.log("Selected all records successfully.");
       console.log(row);
     });
