@@ -60,7 +60,7 @@ function main() {
     })
     .then(() => {
       console.log("Closed DB successfully.");
-    })
+    });
 }
 
 main();
