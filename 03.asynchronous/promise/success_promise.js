@@ -54,9 +54,7 @@ function main() {
       console.log(rows);
     })
     .finally(() => {
-      dbClosePromise(() => {
-        console.log("Closed DB successfully.");
-      });
+      dbClosePromise();
     })
     .then(() => {
       console.log("Closed DB successfully.");
