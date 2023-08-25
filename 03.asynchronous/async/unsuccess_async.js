@@ -8,7 +8,7 @@ const dbRunPromise = (sql, param = {}) => {
   return new Promise((resolve, reject) => {
     db.run(sql, param, function (err) {
       if (err) return reject(err);
-      resolve(this.lastID);
+      resolve();
     });
   });
 };
