@@ -20,10 +20,9 @@ const dbAllPromise = (sql, param = {}) => {
   });
 };
 
-const dbClosePromise = function (cb = new Function()) {
+const dbClosePromise = function () {
   return new Promise((resolve) => {
     db.close(function () {
-      cb();
       resolve();
     });
   });
@@ -58,7 +57,10 @@ function main() {
       dbClosePromise(() => {
         console.log("Closed DB successfully.");
       });
-    });
+    })
+    .then(() => {
+      console.log("Closed DB successfully.");
+    })
 }
 
 main();
