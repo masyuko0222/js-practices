@@ -4,64 +4,53 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-const createTablePromise = () => {
-  return new Promise((resolve) => {
-    db.run(
-      "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-      () => {
-        resolve();
-      }
-    );
-  });
-};
-
-const insertRecordsRejectPromise = () => {
-  return new Promise((_, reject) => {
-    db.run(
-      "INSERT INTO books (no_column) VALUES ($title1), ($title2)",
-      { $title1: "FirstBook", $title2: "SecondBook" },
-      (error) => {
-        reject(error);
-      }
-    );
-  });
-};
-
-const selectAllRecordsRejectPromise = () => {
-  return new Promise((_, reject) => {
-    db.all("SELECT * FROM no_table", (error) => {
-      reject(error);
+const dbRunPromise = (sql, param = {}) => {
+  return new Promise((resolve, reject) => {
+    db.run(sql, param, function (err) {
+      if (err) return reject(err);
+      resolve(this.lastID);
     });
   });
 };
 
-const closeDbPromise = () => {
+const dbAllPromise = (sql, param = {}) => {
+  return new Promise((_, reject) => {
+    db.all(sql, param, (err) => {
+      reject(err);
+    });
+  });
+};
+
+const dbClosePromise = function (cb = new Function()) {
   return new Promise((resolve) => {
-    db.close(() => {
+    db.close(function () {
+      cb();
       resolve();
     });
   });
 };
 
 async function main() {
-  await createTablePromise();
-  console.log("Created books table successfully.");
+  await dbRunPromise(
+    "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
+  );
+  console.log("Create table successfully.");
 
   try {
-    await insertRecordsRejectPromise();
-  } catch (error) {
-    console.log("Error occurred!!!");
-    console.error(error);
+    await dbRunPromise(
+      "INSERT INTO books (no_column) VALUES ($title1), ($title2)"
+    );
+  } catch (err) {
+    console.error(err.message);
   }
 
   try {
-    await selectAllRecordsRejectPromise();
-  } catch (error) {
-    console.log("Error occurred!!!");
-    console.error(error);
+    await dbAllPromise("SELECT * FROM no_table");
+  } catch (err) {
+    console.error(err);
   }
 
-  await closeDbPromise();
+  await dbClosePromise();
   console.log("Closed DB successfully.");
 }
 
