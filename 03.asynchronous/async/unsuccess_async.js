@@ -47,7 +47,7 @@ async function main() {
   try {
     await dbAllPromise("SELECT * FROM no_table");
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
   }
 
   await dbClosePromise();
