@@ -4,66 +4,58 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-const createTablePromise = () => {
-  return new Promise((resolve) => {
-    db.run(
-      "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-      () => {
-        resolve();
-      }
-    );
-  });
-};
-
-const insertRecordsRejectPromise = () => {
-  return new Promise((_, reject) => {
-    db.run(
-      "INSERT INTO books (no_column) VALUES ($title1), ($title2)",
-      { $title1: "FirstBook", $title2: "SecondBook" },
-      (error) => {
-        if (error) {
-          reject(error);
-        }
-      }
-    );
-  });
-};
-
-const selectAllRecordsRejectPromise = () => {
-  return new Promise((_, reject) => {
-    db.all("SELECT * FROM no_table", (error) => {
-      if (error) {
-        reject(error);
-      }
+const dbRunPromise = (sql, param = {}) => {
+  return new Promise((resolve, reject) => {
+    db.run(sql, param, function (err) {
+      if (err) return reject(err);
+      resolve(this.lastID);
     });
   });
 };
 
-const closeDbPromise = () => {
+const dbAllPromise = (sql, param = {}) => {
+  return new Promise((_, reject) => {
+    db.all(sql, param, (err) => {
+      reject(err);
+    });
+  });
+};
+
+const dbClosePromise = function (cb = new Function()) {
   return new Promise((resolve) => {
-    db.close(() => {
+    db.close(function () {
+      cb();
       resolve();
     });
   });
 };
 
-createTablePromise()
-  .then(() => {
-    console.log("Created books table successfully.");
-    return insertRecordsRejectPromise();
-  })
-  .catch((error) => {
-    console.log("Error occured!!!");
-    console.error(error.message);
-    return selectAllRecordsRejectPromise();
-  })
-  .catch((error) => {
-    console.log("Error occured!");
-    console.error(error.message);
-  })
-  .finally(() => {
-    return closeDbPromise();
-  })
-  .then(() => {
-    console.log("Closed DB successfully.");
-  });
+function main() {
+  dbRunPromise(
+    "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
+  )
+    .then(() => {
+      console.log("Created table successfully.");
+    })
+    .then(() => {
+      return dbRunPromise(
+        "INSERT INTO books (no_column) VALUES ($title1), ($title2)"
+      );
+    })
+    .catch((err) => {
+      console.error(err.message);
+    })
+    .then(() => {
+      return dbAllPromise("SELECT * FROM no_table");
+    })
+    .catch((err) => {
+      console.error(err.message);
+    })
+    .finally(() => {
+      dbClosePromise(() => {
+        console.log("Closed DB successfully.");
+      });
+    });
+}
+
+main();
