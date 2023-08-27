@@ -7,9 +7,9 @@ import {
   dbClosePromise,
 } from "../module/sqlite3_functions.js";
 
-const db = new sqlite3.Database(":memory:");
-
 function main() {
+  const db = new sqlite3.Database(":memory:");
+
   dbRunPromise(
     db,
     "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
