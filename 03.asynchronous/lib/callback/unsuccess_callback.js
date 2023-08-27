@@ -12,10 +12,8 @@ db.run(
       "INSERT INTO books(no_column) VALUES($title1), ($title2)",
       { $title1: "First Book", $title2: "Second Book" },
       (err) => {
-        console.log("Failed inserting.");
         console.error(err.message);
         db.all("SELECT * FROM no_table", (err) => {
-          console.log("Failed selecting");
           console.error(err.message);
           db.close(() => {
             console.log("Closed DB");
