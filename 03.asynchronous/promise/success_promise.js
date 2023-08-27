@@ -1,42 +1,24 @@
 #! /usr/bin/env node
 
 import sqlite3 from "sqlite3";
+import {
+  dbRunPromise,
+  dbAllPromise,
+  dbClosePromise,
+} from "../module/sqlite3_functions.js";
 
 const db = new sqlite3.Database(":memory:");
 
-const dbRunPromise = (sql, param = {}) => {
-  return new Promise((resolve) => {
-    db.run(sql, param, function () {
-      resolve(this.lastID);
-    });
-  });
-};
-
-const dbAllPromise = (sql, param = {}) => {
-  return new Promise((resolve) => {
-    db.all(sql, param, (_, rows) => {
-      resolve(rows);
-    });
-  });
-};
-
-const dbClosePromise = function () {
-  return new Promise((resolve) => {
-    db.close(function () {
-      resolve();
-    });
-  });
-};
-
 function main() {
   dbRunPromise(
+    db,
     "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
   )
     .then(() => {
       console.log("Created table successfully.");
-    })
-    .then(() => {
+
       return dbRunPromise(
+        db,
         "INSERT INTO books (title) VALUES ($title1), ($title2)",
         {
           $title1: "FirstBook",
@@ -46,15 +28,13 @@ function main() {
     })
     .then((lastId) => {
       console.log(`The last inserted ID is ${lastId}`);
-    })
-    .then(() => {
-      return dbAllPromise("SELECT * FROM books");
+      return dbAllPromise(db, "SELECT * FROM books");
     })
     .then((rows) => {
       console.log(rows);
     })
     .finally(() => {
-      dbClosePromise();
+      dbClosePromise(db);
     })
     .then(() => {
       console.log("Closed DB successfully.");
