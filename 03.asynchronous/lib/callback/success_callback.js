@@ -12,10 +12,8 @@ db.run(
       "INSERT INTO books(title) VALUES($title1), ($title2)",
       { $title1: "First Book", $title2: "Second Book" },
       function () {
-        console.log("Inserted records successfully.");
         console.log(`Last inserted ID is ${this.lastID}.`);
         db.all("SELECT * FROM books", (_, rows) => {
-          console.log("Selected all records successfully.");
           console.log(rows);
           db.close(() => {
             console.log("Closed DB successfully.");
