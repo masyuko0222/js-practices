@@ -23,17 +23,25 @@ async function main() {
       "INSERT INTO books (no_column) VALUES ($title1), ($title2)"
     );
   } catch (err) {
-    console.error(err.message);
+    handleError(err);
   }
 
   try {
     await dbAllPromise(db, "SELECT * FROM no_table");
   } catch (err) {
-    console.error(err.message);
+    handleError(err);
   }
 
   await dbClosePromise(db);
   console.log("Closed DB successfully.");
+}
+
+function handleError(err) {
+  if (err.code === "SQLITE_ERROR") {
+    console.error(err.message);
+  } else {
+    throw err;
+  }
 }
 
 main();
