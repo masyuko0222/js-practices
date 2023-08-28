@@ -15,8 +15,11 @@ db.run(
         console.log(`Last inserted ID is ${this.lastID}.`);
         db.all("SELECT * FROM books", (_, rows) => {
           console.log(rows);
-          db.close(() => {
-            console.log("Closed DB successfully.");
+          db.run("DROP TABLE books;", [], () => {
+            console.log("Dropped books table successfully.");
+            db.close(() => {
+              console.log("Closed DB successfully.");
+            });
           });
         });
       }
