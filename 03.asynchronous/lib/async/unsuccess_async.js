@@ -15,7 +15,7 @@ async function main() {
     db,
     "CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
   );
-  console.log("Create table successfully.");
+  console.log("Created table successfully.");
 
   try {
     await dbRunPromise(
