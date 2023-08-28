@@ -6,6 +6,7 @@ import {
   dbAllPromise,
   dbClosePromise,
 } from "../../module/sqlite3_functions.js";
+import { handleError } from "../../module/error_handling.js";
 
 async function main() {
   const db = new sqlite3.Database(":memory:");
@@ -33,14 +34,6 @@ async function main() {
 
   await dbClosePromise(db);
   console.log("Closed DB successfully.");
-}
-
-function handleError(err) {
-  if (err.code === "SQLITE_ERROR") {
-    console.error(err.message);
-  } else {
-    throw err;
-  }
 }
 
 main();

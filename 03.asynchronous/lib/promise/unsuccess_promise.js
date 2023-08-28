@@ -6,6 +6,7 @@ import {
   dbAllPromise,
   dbClosePromise,
 } from "../../module/sqlite3_functions.js";
+import { handleError } from "../../module/error_handling.js";
 
 function main() {
   const db = new sqlite3.Database(":memory:");
@@ -22,11 +23,11 @@ function main() {
       );
     })
     .catch((err) => {
-      console.error(err.message);
+      handleError(err);
       return dbAllPromise(db, "SELECT * FROM no_table");
     })
     .catch((err) => {
-      console.error(err.message);
+      handleError(err);
     })
     .finally(() => {
       dbClosePromise(db);
