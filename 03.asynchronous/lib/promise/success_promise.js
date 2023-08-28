@@ -32,6 +32,10 @@ function main() {
     })
     .then((rows) => {
       console.log(rows);
+      return dbRunPromise(db, "DROP TABLE books;");
+    })
+    .then(() => {
+      console.log("Dropped books table successfully.");
     })
     .finally(() => {
       dbClosePromise(db);

@@ -29,6 +29,12 @@ function main() {
     .catch((err) => {
       handleError(err);
     })
+    .then(() => {
+      return dbRunPromise(db, "DROP TABLE books;");
+    })
+    .then(() => {
+      console.log("Dropped books table successfully.");
+    })
     .finally(() => {
       dbClosePromise(db);
     })
