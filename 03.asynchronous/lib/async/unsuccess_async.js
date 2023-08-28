@@ -30,10 +30,10 @@ async function main() {
     await dbAllPromise(db, "SELECT * FROM no_table");
   } catch (err) {
     handleError(err);
+  } finally {
+    await dbClosePromise(db);
+    console.log("Closed DB successfully.");
   }
-
-  await dbClosePromise(db);
-  console.log("Closed DB successfully.");
 }
 
 main();
