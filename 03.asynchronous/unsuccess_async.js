@@ -5,8 +5,8 @@ import {
   dbRunPromise,
   dbAllPromise,
   dbClosePromise,
-} from "../../module/sqlite3_functions.js";
-import { handleError } from "../../module/error_handling.js";
+} from "./lib/sqlite3_functions.js";
+import { handleError } from "./lib/error_handling.js";
 
 async function main() {
   const db = new sqlite3.Database(":memory:");

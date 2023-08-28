@@ -5,7 +5,8 @@ import {
   dbRunPromise,
   dbAllPromise,
   dbClosePromise,
-} from "../../module/sqlite3_functions.js";
+} from "./lib/sqlite3_functions.js";
+import { handleError } from "./lib/error_handling.js";
 
 function main() {
   const db = new sqlite3.Database(":memory:");
@@ -16,22 +17,19 @@ function main() {
   )
     .then(() => {
       console.log("Created table successfully.");
-
       return dbRunPromise(
         db,
-        "INSERT INTO books (title) VALUES ($title1), ($title2)",
-        {
-          $title1: "FirstBook",
-          $title2: "SecondBook",
-        }
+        "INSERT INTO books (no_column) VALUES ($title1), ($title2)"
       );
     })
-    .then((lastId) => {
-      console.log(`The last inserted ID is ${lastId}`);
-      return dbAllPromise(db, "SELECT * FROM books");
+    .catch((err) => {
+      handleError(err);
+      return dbAllPromise(db, "SELECT * FROM no_table");
     })
-    .then((rows) => {
-      console.log(rows);
+    .catch((err) => {
+      handleError(err);
+    })
+    .then(() => {
       return dbRunPromise(db, "DROP TABLE books;");
     })
     .then(() => {
