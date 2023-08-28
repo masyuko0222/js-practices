@@ -31,6 +31,9 @@ async function main() {
   } catch (err) {
     handleError(err);
   } finally {
+    await dbRunPromise(db, "DROP TABLE books;");
+    console.log("Dropped books table successfully.");
+
     await dbClosePromise(db);
     console.log("Closed DB successfully.");
   }

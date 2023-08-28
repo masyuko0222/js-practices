@@ -29,6 +29,9 @@ async function main() {
   const rows = await dbAllPromise(db, "SELECT * FROM books");
   console.log(rows);
 
+  await dbRunPromise(db, "DROP TABLE books;");
+  console.log("Dropped books table successfully.");
+
   await dbClosePromise(db);
   console.log("Closed DB successfully.");
 }
