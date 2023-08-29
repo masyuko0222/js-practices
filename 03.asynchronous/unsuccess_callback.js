@@ -15,7 +15,7 @@ db.run(
         console.error(err.message);
         db.all("SELECT * FROM no_table", (err) => {
           console.error(err.message);
-          db.run("DROP TABLE books;", [], () => {
+          db.run("DROP TABLE books;", () => {
             console.log("Dropped books table successfully.");
             db.close(() => {
               console.log("Closed DB successfully.");

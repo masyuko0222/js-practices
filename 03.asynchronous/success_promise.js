@@ -38,7 +38,7 @@ function main() {
       console.log("Dropped books table successfully.");
     })
     .finally(() => {
-      dbClosePromise(db);
+      return dbClosePromise(db);
     })
     .then(() => {
       console.log("Closed DB successfully.");
