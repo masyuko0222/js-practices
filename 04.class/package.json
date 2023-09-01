@@ -10,7 +10,7 @@
   },
   "type": "module",
   "dependencies": {
-    "enquire": "^0.0.2",
+    "enquirer": "^2.4.1",
     "minimist": "^1.2.8",
     "sqlite3": "^5.1.6"
   }
