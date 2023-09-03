@@ -1,34 +1,45 @@
 #! /usr/bin/env node
 
 import fs from "fs";
+import minimist from "minimist";
 import sqlite3 from "sqlite3";
 
+const DB = "memos.db";
+
 async function main() {
-  const db = new sqlite3.Database("memos.db");
-  const memo = newMemo();
-  save(db, memo);
+  const options = minimist(process.argv);
+  const db = new sqlite3.Database(DB);
+
+  if (options.l) {
+    index(db);
+  } else {
+    const memo = newMemo();
+    save(db, memo);
+  }
+}
+
+async function index(db) {
+  const memos = await all(db, "SELECT * FROM memos");
+
+  memos.forEach((memo) => {
+    console.log(memo.firstLine);
+  });
+
+  await close(db);
 }
 
 async function save(db, memo) {
-  try {
-    await run(
-      db,
-      "CREATE TABLE IF NOT EXISTS memos(id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT NOT NULL, firstLine TEXT NOT NULL)"
-    );
+  await run(
+    db,
+    "CREATE TABLE IF NOT EXISTS memos(id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT NOT NULL, firstLine TEXT NOT NULL)"
+  );
 
-    await run(db, "INSERT INTO memos (content, firstLine) VALUES (?, ?)", [
-      memo.content,
-      memo.firstLine,
-    ]);
-  } catch (err) {
-    if (err instanceof Error) {
-      console.log(err);
-    } else {
-      throw err;
-    }
-  } finally {
-    close(db);
-  }
+  await run(db, "INSERT INTO memos (content, firstLine) VALUES (?, ?)", [
+    memo.content,
+    memo.firstLine,
+  ]);
+
+  await close(db);
 }
 
 function newMemo() {
@@ -41,6 +52,14 @@ function run(db, sql, params = {}) {
   return new Promise((resolve, reject) => {
     db.run(sql, params, (err) => {
       err ? reject(err) : resolve();
+    });
+  });
+}
+
+function all(db, sql, params = {}) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      err ? reject(err) : resolve(rows);
     });
   });
 }
