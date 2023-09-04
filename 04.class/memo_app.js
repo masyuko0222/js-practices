@@ -7,7 +7,7 @@ import sqlite3 from "sqlite3";
 
 const DB = "memos.db";
 
-async function main() {
+function main() {
   const options = minimist(process.argv);
   const db = new sqlite3.Database(DB);
 
@@ -16,6 +16,8 @@ async function main() {
       index(db);
     } else if (options.r) {
       show(db);
+    } else if (options.d) {
+      destroy(db);
     } else {
       save(db);
     }
@@ -41,7 +43,7 @@ async function index(db) {
 async function show(db) {
   const memos = await allMemos(db);
   const memo = await selectMemo(memos);
-  console.log(memo);
+  console.log(memo.content);
   await close(db);
 }
 
@@ -61,6 +63,15 @@ async function save(db) {
   await close(db);
 }
 
+async function destroy(db) {
+  const memos = await allMemos(db);
+  const memo = await selectMemo(memos);
+  const id = memo.id;
+
+  await run(db, "DELETE FROM memos where id = ?", [id]);
+  await close(db);
+}
+
 const newMemo = () => {
   const stdin = fs.readFileSync("/dev/stdin", "utf8");
   const firstLine = stdin.split(`\n`)[0].trim();
@@ -77,7 +88,10 @@ const selectMemo = async (memos) => {
     name: "memos",
     message: "Choose a note you want to see:",
     choices: memos.map((memo) => {
-      return { name: memo.firstLine, value: memo.content };
+      return {
+        name: memo.firstLine,
+        value: { id: memo.id, content: memo.content },
+      };
     }),
     result() {
       return this.focused.value;
