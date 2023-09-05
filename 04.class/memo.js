@@ -7,6 +7,7 @@ import { Memo } from "./class/memo_class.js";
 
 const DB = "memos.db";
 
+// あくまでDRY化しただけのメソッドなので、データを何も持たないmainファイルでも、いくつかの関数定義がされています。
 async function newFormat(db) {
   const memos = await Memo.all(db);
   return new Format(memos);
@@ -19,6 +20,7 @@ async function select(db) {
   return selected;
 }
 
+// main
 async function main() {
   const options = minimist(process.argv);
   const db = new sqlite3.Database(DB);

@@ -1,6 +1,10 @@
 import enquirer from "enquirer";
 
 export class Format {
+  static show(memo) {
+    console.log(memo.content);
+  }
+
   #memos;
 
   constructor(memos) {
@@ -11,10 +15,6 @@ export class Format {
     this.#memos.forEach((memo) => {
       console.log(memo.firstLine);
     });
-  }
-
-  show(memo) {
-    console.log(memo.content);
   }
 
   async select() {
