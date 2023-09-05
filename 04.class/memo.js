@@ -7,25 +7,27 @@ import { Memo } from "./class/memo_class.js";
 
 const DB = "memos.db";
 
+async function newFormat(db) {
+  const memos = await Memo.all(db);
+  return new Format(memos);
+}
+
 async function main() {
   const options = minimist(process.argv);
   const db = new sqlite3.Database(DB);
 
   try {
     if (options.l) {
-      const memos = await Memo.all(db);
-      const format = new Format(memos);
+      const format = await newFormat(db);
 
       format.index();
     } else if (options.r) {
-      const memos = await Memo.all(db);
-      const format = new Format(memos);
+      const format = await newFormat(db);
       const selected = await format.select();
 
       format.show(selected);
     } else if (options.d) {
-      const memos = await Memo.all(db);
-      const format = new Format(memos);
+      const format = await newFormat(db);
       const selected = await format.select();
 
       await Memo.destroy(db, selected);
