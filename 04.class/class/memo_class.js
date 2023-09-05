@@ -5,6 +5,10 @@ export class Memo {
     return all(db, "SELECT * FROM memos");
   }
 
+  static async destroy(db, memo) {
+    await run(db, "DELETE FROM memos where id = ?", [memo.id]);
+  }
+
   #content;
   #firstLine;
 
@@ -23,9 +27,5 @@ export class Memo {
       this.#content,
       this.#firstLine,
     ]);
-  }
-
-  static async destroy(db, memo) {
-    await run(db, "DELETE FROM memos where id = ?", [memo.id]);
   }
 }
