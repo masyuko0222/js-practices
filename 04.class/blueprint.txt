@@ -1,0 +1,10 @@
+Class
+
+- Memo
+  - id, content, firstLine
+  + #all, #save, #destroy
+
+- Format
+  - memos
+  + select, index, show
+
