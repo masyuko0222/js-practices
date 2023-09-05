@@ -12,6 +12,13 @@ async function newFormat(db) {
   return new Format(memos);
 }
 
+async function select(db) {
+  const format = await newFormat(db);
+  const selected = await format.select();
+
+  return selected;
+}
+
 async function main() {
   const options = minimist(process.argv);
   const db = new sqlite3.Database(DB);
@@ -19,22 +26,16 @@ async function main() {
   try {
     if (options.l) {
       const format = await newFormat(db);
-
       format.index();
     } else if (options.r) {
-      const format = await newFormat(db);
-      const selected = await format.select();
-
-      format.show(selected);
+      const selected = await select(db);
+      Format.show(selected);
     } else if (options.d) {
-      const format = await newFormat(db);
-      const selected = await format.select();
-
+      const selected = await select(db);
       await Memo.destroy(db, selected);
     } else {
       const stdin = fs.readFileSync("/dev/stdin", "utf8");
       const memo = new Memo(stdin);
-
       await memo.save(db);
     }
   } catch (err) {
