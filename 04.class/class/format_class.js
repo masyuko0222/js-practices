@@ -17,11 +17,11 @@ export class Format {
     });
   }
 
-  async select() {
+  async select(msg = "") {
     const question = {
       type: "select",
       name: "memos",
-      message: "Choose a note you want to see:",
+      message: msg,
       choices: this.#memos.map((memo) => {
         return {
           name: memo.firstLine,

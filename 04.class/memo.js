@@ -13,9 +13,9 @@ async function newFormat(db) {
   return new Format(memos);
 }
 
-async function select(db) {
+async function select(db, msg = "") {
   const format = await newFormat(db);
-  const selected = await format.select();
+  const selected = await format.select(msg);
 
   return selected;
 }
@@ -30,10 +30,10 @@ async function main() {
       const format = await newFormat(db);
       format.index();
     } else if (options.r) {
-      const selected = await select(db);
+      const selected = await select(db, "Choose a note you want to see:");
       Format.show(selected);
     } else if (options.d) {
-      const selected = await select(db);
+      const selected = await select(db, "Choose a note you want to delete:");
       await Memo.destroy(db, selected);
     } else {
       const stdin = fs.readFileSync("/dev/stdin", "utf8");
