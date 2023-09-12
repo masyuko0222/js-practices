@@ -2,9 +2,11 @@ Class
 
 - Memo
   - id, content, firstLine
-  + #all, #save, #destroy
+  + #all, #destroy, save
 
-- Format
+- Selector
   - memos
-  + select, index, show
+  + choice
 
+- Modules
+  - sqlite, view
