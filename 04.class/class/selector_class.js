@@ -1,23 +1,13 @@
 import enquirer from "enquirer";
 
-export class Format {
-  static show(memo) {
-    console.log(memo.content);
-  }
-
+export class Selector {
   #memos;
 
   constructor(memos) {
     this.#memos = memos;
   }
 
-  index() {
-    this.#memos.forEach((memo) => {
-      console.log(memo.firstLine);
-    });
-  }
-
-  async select(msg = "") {
+  async choice(msg = "") {
     const question = {
       type: "select",
       name: "memos",

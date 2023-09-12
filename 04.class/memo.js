@@ -2,39 +2,29 @@ import fs from "fs";
 import minimist from "minimist";
 import sqlite3 from "sqlite3";
 import { close } from "./module/sqlite3_module.js";
-import { Format } from "./class/format_class.js";
+import { index, show } from "./module/view_module.js";
 import { Memo } from "./class/memo_class.js";
+import { Selector } from "./class/selector_class.js";
 
 const DB = "memos.db";
 
-// あくまでDRY化しただけのメソッドなので、データを何も持たないmainファイルでも、いくつかの関数定義がされています。
-async function newFormat(db) {
-  const memos = await Memo.all(db);
-  return new Format(memos);
-}
-
-async function select(db, msg = "") {
-  const format = await newFormat(db);
-  const selected = await format.select(msg);
-
-  return selected;
-}
-
-// main
 async function main() {
   const options = minimist(process.argv);
   const db = new sqlite3.Database(DB);
 
   try {
     if (options.l) {
-      const format = await newFormat(db);
-      format.index();
+      const memos = await Memo.all(db);
+      index(memos);
     } else if (options.r) {
-      const selected = await select(db, "Choose a note you want to see:");
-      Format.show(selected);
+      const choiced_memo = await choice(db, "Choose a note you want to show:");
+      show(choiced_memo);
     } else if (options.d) {
-      const selected = await select(db, "Choose a note you want to delete:");
-      await Memo.destroy(db, selected);
+      const choiced_memo = await choice(
+        db,
+        "Choose a note you want to delete:"
+      );
+      await Memo.destroy(db, choiced_memo);
     } else {
       const stdin = fs.readFileSync("/dev/stdin", "utf8");
       const memo = new Memo(stdin);
@@ -49,6 +39,14 @@ async function main() {
   } finally {
     await close(db);
   }
+}
+
+// DRY method
+async function choice(db, msg = "") {
+  const memos = await Memo.all(db);
+  const selector = new Selector(memos);
+  const choiced_memo = await selector.choice(msg);
+  return choiced_memo;
 }
 
 main();
