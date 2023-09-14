@@ -1,8 +1,8 @@
-export function show(memo) {
+export function reference(memo) {
   console.log(memo.content);
 }
 
-export function index(memos) {
+export function list(memos) {
   memos.forEach((memo) => {
     console.log(memo.firstLine);
   });
