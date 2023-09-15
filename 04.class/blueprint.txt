@@ -1,12 +1,12 @@
 Class
 
-- Memo
+- Memo class
   - id, content, firstLine
   + #all, #destroy, save
 
-- Selector
-  - memos
-  + choice
+- SqliteDB class
+  - db
+  + run, all, close
 
 - Modules
-  - sqlite, view
+  - view, selector
