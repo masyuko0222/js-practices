@@ -1,10 +1,10 @@
 import fs from "fs";
 import minimist from "minimist";
 import sqlite3 from "sqlite3";
-import { choice } from "./module/selector_module.js";
-import { close } from "./module/sqlite3_module.js";
-import { list, reference } from "./module/view_module.js";
-import { Memo } from "./class/memo_class.js";
+import { choice } from "../module/selector_module.js";
+import { close } from "../module/sqlite3_module.js";
+import { list, reference } from "../module/view_module.js";
+import { Memo } from "../class/Memo.js";
 
 const DB = "memos.db";
 
