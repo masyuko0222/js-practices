@@ -1,0 +1,12 @@
+Class
+
+- Memo class
+  - id, content, firstLine
+  + #all, #destroy, save
+
+- SqliteDB class
+  - db
+  + run, all, close
+
+- Modules
+  - view, selector
